@@ -84,7 +84,7 @@ class MyEnv(gym.Env):
         self.info["Chosen action"] = None
         self.info["Real action"] = None
 
-        # self.render()
+        self.render()
 
         return self.state, self.info
 
@@ -217,6 +217,9 @@ class MyEnv(gym.Env):
 
     def close(self) -> None:
         pygame.quit()
+
+    def get_image(self) -> np.ndarray:
+        return pygame.surfarray.array3d(pygame.display.get_surface()).swapaxes(0, 1)
 
 
 def create_env(grid_size: int,

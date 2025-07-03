@@ -8,20 +8,21 @@ from utils import *
 
 # User definitions:
 # -----------------
-train = True
-visualize_results = True
+train = False
+visualize_results = False
+need_save_gif = True
 
-learning_rate = 0.01  # Learning rate
+learning_rate = 0.02  # Learning rate
 gamma = 0.99  # Discount factor
 epsilon = 1.0  # Exploration rate
 epsilon_min = 0.1  # Minimum exploration rate
-epsilon_decay = 0.999  # Decay rate for exploration
-no_episodes = 2000  # Number of episodes
+epsilon_decay = 0.9995  # Decay rate for exploration
+no_episodes = 10000  # Number of episodes
 
-random_initialization = True
-is_stochastic = False
+random_initialization = False
+is_stochastic = True
 folder_path = "runs"
-run_postfix = "small_normal_lr001_g0999_decay0999_episodes2000"
+run_postfix = "large_stochastic_rand_init_lr002_g099_decay09995_episodes10000"
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 run_folder = os.path.join(script_dir, folder_path)
@@ -33,16 +34,16 @@ rewards_path = os.path.join(run_folder, f"rewards_{run_postfix}.npy")
 # Define the grid size and coordinates:
 # -----------------------------------
 # small grid example:
-grid_size = 5
-goal_coordinates = (4, 4)
-dog_state_coordinates = [(0, 2), (3, 1)]
-puddle_state_coordinates = [(1, 0), (2, 4), (3, 2)]
+# grid_size = 5
+# goal_coordinates = (4, 4)
+# dog_state_coordinates = [(0, 2), (3, 1)]
+# puddle_state_coordinates = [(1, 0), (2, 4), (3, 2)]
 
 # large grid example:
-# grid_size = 10
-# goal_coordinates = (9, 9)
-# dog_state_coordinates = generate_unique_tuples(15, 9, 9, [goal_coordinates, [0,0]], 3)
-# puddle_state_coordinates = generate_unique_tuples(10, 9, 9, [goal_coordinates, [0,0]] + dog_state_coordinates, 5)
+grid_size = 10
+goal_coordinates = (9, 9)
+dog_state_coordinates = generate_unique_tuples(15, 9, 9, [goal_coordinates, [0,0]], 3)
+puddle_state_coordinates = generate_unique_tuples(10, 9, 9, [goal_coordinates, [0,0]] + dog_state_coordinates, 5)
 
 # Execute:
 # --------
@@ -81,3 +82,17 @@ if visualize_results:
     # ----------------------
     visualize_rewards(rewards_save_path=rewards_path,
                       file_name=os.path.join(run_folder, f"rewards_{run_postfix}.jpg"))
+
+if need_save_gif:
+    # Create a GIF from the saved images:
+    # -----------------------------------
+    env = create_env(grid_size=grid_size,
+                    is_stochastic=is_stochastic,
+                    random_initialization=random_initialization,
+                    goal_coordinates=goal_coordinates,
+                    dog_state_coordinates=dog_state_coordinates,
+                    puddle_state_coordinates=puddle_state_coordinates)
+    save_gif(env=env,
+              file_name=os.path.join(run_folder, f"policy_{run_postfix}.gif"),
+              q_values_path=q_table_path,
+              fps=5)
