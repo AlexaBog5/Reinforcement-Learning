@@ -133,9 +133,9 @@ class ContinuousMazeEnv(gym.Env):
                         if xmin - margin <= self.agent_pos[0] <= xmax + margin and \
                             ymin - margin <= self.agent_pos[1] <= ymax + margin:
 
-                            dist_x = max(xmin - self.agent_pos[0], self.agent_pos[0] - xmax)
-                            dist_y = max(ymin - self.agent_pos[1], self.agent_pos[1] - ymax)
-                            reward -= (0.3 - min(dist_x, dist_y)) * 5
+                            dist_x = margin - max(xmin - self.agent_pos[0], self.agent_pos[0] - xmax)
+                            dist_y = margin - max(ymin - self.agent_pos[1], self.agent_pos[1] - ymax)
+                            reward -= dist_x + dist_y
                             break
 
         observation = self.agent_pos.copy()
