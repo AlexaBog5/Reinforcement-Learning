@@ -159,9 +159,6 @@ def visualize_rewards(window=20, rewards_save_path="rewards.npy", file_name="rew
         moving_average.append(summation / num)
     plt.plot(moving_average, label='Moving Average', color='red', linewidth=3)
 
-    # epsilons = [epsilon * (epsilon_decay ** i) for i in range(len(rewards))]
-    # plt.plot(epsilons, label='Epsilon Decay', color='orange')
-
     plt.xlabel("Epoch")
     plt.ylabel("Reward")
     plt.title("Rewards per Epoch")
